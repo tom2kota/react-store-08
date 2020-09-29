@@ -8,9 +8,27 @@ E-commerce project DEMO:
 ---------------
 
 ## [Redux Saga](https://www.npmjs.com/package/redux-saga)
-
+- [docs](https://redux-saga.js.org)
 ```
 npm i redux-saga
+```
+
+Listening for the actions, Create asynchronous generator functions
+
+``` 
+// shopSagas
+
+export function* fetchCollectionsAsync() {
+    yield console.log('........SHOP SAGA........')
+    try {
+        const collectionRef = firestore.collection('collections');
+        const snapshot = yield collectionRef.get();
+        const collectionsMap = yield call(convertCollectionsSnapshotToMap, snapshot);
+        yield put(fetchCollectionsSuccess(collectionsMap))
+    } catch (error) {
+        yield put(fetchCollectionsFailure(error.message))
+    }
+}
 ```
 
 ---------------
@@ -28,8 +46,30 @@ Containers don't render anything, they just pass props down to components
 ```
 
 - [Redux Thunk](https://www.npmjs.com/package/redux-thunk)
+
 ``` 
 npm i redux-thunk
+```
+
+Creating fetchCollectionsStartAsync asynchronous action
+``` 
+// shopActions
+
+export const fetchCollectionsStartAsync = () => {
+    return dispatch => {
+        const collectionRef = firestore.collection('collections');
+        dispatch(fetchCollectionsStart())
+
+        collectionRef
+            .get()
+            .then(
+                async snapshot => {
+                    const collectionsMap = convertCollectionsSnapshotToMap(snapshot);
+                    dispatch(fetchCollectionsSuccess(collectionsMap))
+                })
+            .catch(error => dispatch(fetchCollectionsFailure(error.message)))
+    }
+}
 ```
 
 ---------------
