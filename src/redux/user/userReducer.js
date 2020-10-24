@@ -1,7 +1,9 @@
 import {
     SIGN_IN_FAILURE,
     SIGN_IN_SUCCESS,
-    SIGN_OUT_FAILURE, SIGN_OUT_SUCCESS
+    SIGN_OUT_FAILURE,
+    SIGN_OUT_SUCCESS,
+    SIGN_UP_FAILURE
 } from "./userTypes";
 
 const INITIAL_STATE = {
@@ -25,6 +27,7 @@ export const userReducer = (state = INITIAL_STATE, action) => {
             }
         case SIGN_OUT_FAILURE:
         case SIGN_IN_FAILURE:
+        case SIGN_UP_FAILURE:
             return {
                 ...state,
                 error: action.payload
